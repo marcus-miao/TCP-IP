@@ -11,14 +11,10 @@
 //! and then no more bytes can be written.
 class ByteStream {
   private:
-    // Your code here -- add private members as necessary.
-    deque<char> buffer;
-    int capacity;
-
-    // Hint: This doesn't need to be a sophisticated data structure at
-    // all, but if any of your tests are taking longer than a second,
-    // that's a sign that you probably want to keep exploring
-    // different approaches.
+    std::deque<char> _buffer;
+    size_t _capacity; 
+    size_t _bytesRead, _bytesWritten;
+    bool _inputEnded;
 
     bool _error{};  //!< Flag indicating that the stream suffered an error.
 
