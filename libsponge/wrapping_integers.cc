@@ -6,7 +6,7 @@ using namespace std;
 //! \param n The input absolute 64-bit sequence number
 //! \param isn The initial sequence number
 WrappingInt32 wrap(uint64_t n, WrappingInt32 isn) {
-    return WrappingInt32{isn + static_cast<uint32_t>(n & UINT32_MAX)}; // n & 0xffffffff gives the modulo
+    return WrappingInt32{isn + static_cast<uint32_t>(n & UINT32_MAX)}; // n & 0xffffffff gives the n % (1ul << 32)
 }
 
 //! Transform a WrappingInt32 into an "absolute" 64-bit sequence number (zero-indexed)
@@ -22,7 +22,7 @@ WrappingInt32 wrap(uint64_t n, WrappingInt32 isn) {
 uint64_t unwrap(WrappingInt32 n, WrappingInt32 isn, uint64_t checkpoint) {
     uint32_t offset = n.raw_value() - wrap(checkpoint, isn).raw_value();
     uint64_t result = checkpoint + offset;
-    if (offset > (1ul << 31) && result >= (1ul << 32))
-        result -= (1ul << 32); // The left is closer
+    if (offset > (1ul << 31) && result >= (1ul << 32)) // Can go left and the left is closer
+        result -= (1ul << 32); 
     return result;
 }
